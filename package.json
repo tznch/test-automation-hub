@@ -1,0 +1,39 @@
+{
+  "name": "playwright-hub",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript Training Platform",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd packages/backend && npm run dev",
+    "dev:frontend": "cd packages/frontend && npm run dev",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd packages/backend && npm run build",
+    "build:frontend": "cd packages/frontend && npm run build",
+    "start": "cd packages/backend && npm run start",
+    "lint": "cd packages/backend && npm run lint && cd ../frontend && npm run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
+    "type-check": "cd packages/backend && npm run type-check && cd ../frontend && npm run type-check",
+    "test": "playwright test",
+    "test:unit": "cd packages/backend && npm run test:run && cd ../frontend && npm test -- --run",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report"
+  },
+  "workspaces": [
+    "packages/frontend",
+    "packages/backend"
+  ],
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "concurrently": "^9.1.0",
+    "eslint": "^9.15.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
