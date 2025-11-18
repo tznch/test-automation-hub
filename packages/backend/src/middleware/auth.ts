@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from 'fastify';
-import type { UserType } from '@fastify/jwt';
+import type { UserType as _UserType } from '@fastify/jwt';
 
 declare module '@fastify/jwt' {
   interface FastifyJWT {
@@ -16,7 +16,7 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
   try {
     await request.jwtVerify();
     // User is now properly typed
-  } catch (err) {
+  } catch (_err) {
     reply.code(401).send({ error: 'Unauthorized', message: 'Invalid or missing token' });
   }
 }
@@ -33,7 +33,7 @@ export function requireRole(...roles: string[]) {
           message: `Required role: ${roles.join(' or ')}`,
         });
       }
-    } catch (err) {
+    } catch (_err) {
       reply.code(401).send({ error: 'Unauthorized', message: 'Invalid or missing token' });
     }
   };

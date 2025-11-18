@@ -2,10 +2,10 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
 import fastifyMultipart from '@fastify/multipart';
-import fastifyStatic from '@fastify/static';
+import _fastifyStatic from '@fastify/static';
 import fastifyWebsocket from '@fastify/websocket';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 import { initializeDatabase } from './db/database.js';
 import { seedDatabase } from './db/seed.js';
 import type { FastifyRequest, FastifyReply } from 'fastify';
@@ -153,13 +153,19 @@ await fastify.register(
     instance.get('/users-list', async () => {
       const { userModel } = await import('./models/user.model.js');
       const users = userModel.findAll();
-      return users.map(({ password, ...user }) => user);
+      return users.map(({ password: _password, ...user }) => user);
     });
 
     instance.get('/items-list', async (request) => {
       const { itemModel } = await import('./models/item.model.js');
-      const { page, limit, category, sort, order } = request.query as any;
-      return itemModel.findAll({ page, limit, category, sort, order });
+      const query = request.query as Record<string, string | undefined>;
+      return itemModel.findAll({ 
+        page: query.page ? Number(query.page) : undefined,
+        limit: query.limit ? Number(query.limit) : undefined,
+        category: query.category,
+        sort: query.sort,
+        order: query.order as 'asc' | 'desc' | undefined,
+      });
     });
   },
   { prefix: '/api' }

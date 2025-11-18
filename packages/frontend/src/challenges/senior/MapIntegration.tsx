@@ -235,9 +235,7 @@ export default function MapIntegration() {
                   data-testid={`location-${location.id}`}
                 >
                   <div className="flex items-start gap-2">
-                    <div
-                      className={`w-3 h-3 ${getMarkerColor(location.type)} rounded-full mt-1`}
-                    </div>
+                    <div className={`w-3 h-3 ${getMarkerColor(location.type)} rounded-full mt-1`} />
                     <div className="flex-1">
                       <p className="font-medium text-sm text-gray-900 dark:text-white">{location.name}</p>
                       <p className="text-xs text-gray-600 dark:text-gray-400 capitalize">{location.type}</p>

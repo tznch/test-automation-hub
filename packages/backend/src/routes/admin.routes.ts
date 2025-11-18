@@ -14,7 +14,7 @@ import {
 
 export default async function adminRoutes(fastify: FastifyInstance) {
   // Get all middleware configurations
-  fastify.get('/admin/config', async (request, reply) => {
+  fastify.get('/admin/config', async (_request, _reply) => {
     return {
       errorInjection: getErrorInjectionConfig(),
       latencySimulation: getLatencyConfig(),
@@ -23,41 +23,41 @@ export default async function adminRoutes(fastify: FastifyInstance) {
   });
 
   // Configure error injection
-  fastify.post('/admin/config/error-injection', async (request, reply) => {
+  fastify.post('/admin/config/error-injection', async (request, _reply) => {
     const config = request.body as any;
     configureErrorInjection(config);
     return { success: true, config: getErrorInjectionConfig() };
   });
 
   // Configure latency simulation
-  fastify.post('/admin/config/latency', async (request, reply) => {
+  fastify.post('/admin/config/latency', async (request, _reply) => {
     const config = request.body as any;
     configureLatencySimulation(config);
     return { success: true, config: getLatencyConfig() };
   });
 
   // Configure rate limiting
-  fastify.post('/admin/config/rate-limit', async (request, reply) => {
+  fastify.post('/admin/config/rate-limit', async (request, _reply) => {
     const config = request.body as any;
     configureRateLimit(config);
     return { success: true, config: getRateLimitConfig() };
   });
 
   // Clear rate limit store
-  fastify.post('/admin/rate-limit/clear', async (request, reply) => {
+  fastify.post('/admin/rate-limit/clear', async (_request, _reply) => {
     clearRateLimitStore();
     return { success: true, message: 'Rate limit store cleared' };
   });
 
   // Enable/disable request logging
-  fastify.post('/admin/logging/toggle', async (request, reply) => {
+  fastify.post('/admin/logging/toggle', async (request, _reply) => {
     const { enabled } = request.body as { enabled: boolean };
     enableRequestLogging(enabled);
     return { success: true, enabled };
   });
 
   // Get request logs with filters
-  fastify.get('/admin/logs', async (request, reply) => {
+  fastify.get('/admin/logs', async (request, _reply) => {
     const query = request.query as {
       limit?: string;
       offset?: string;
@@ -80,13 +80,13 @@ export default async function adminRoutes(fastify: FastifyInstance) {
   });
 
   // Clear all request logs
-  fastify.delete('/admin/logs', async (request, reply) => {
+  fastify.delete('/admin/logs', async (_request, _reply) => {
     clearRequestLogs();
     return { success: true, message: 'Request logs cleared' };
   });
 
   // Health check endpoint
-  fastify.get('/admin/health', async (request, reply) => {
+  fastify.get('/admin/health', async (_request, _reply) => {
     return {
       status: 'healthy',
       timestamp: new Date().toISOString(),
