@@ -3,7 +3,7 @@ import api from '../../utils/api';
 
 interface User {
   id: number;
-  name: string;
+  username: string;
   email: string;
   role: string;
   createdAt: string;
@@ -13,7 +13,7 @@ export default function AdminPanel() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [formData, setFormData] = useState({ name: '', email: '', role: 'user' });
+  const [formData, setFormData] = useState({ username: '', email: '', password: '', role: 'user' });
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -23,8 +23,13 @@ export default function AdminPanel() {
       const response = await api.get<{ users: User[] }>('/users');
       setUsers(response.users || []);
       setLoading(false);
-    } catch (err) {
-      setError('Failed to load users');
+      setError('');
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setError('Authentication required. This endpoint requires admin role. Use /api/auth/login with admin credentials first.');
+      } else {
+        setError('Failed to load users');
+      }
       setLoading(false);
     }
   };
@@ -41,7 +46,7 @@ export default function AdminPanel() {
       await api.post('/users', formData);
       setSuccess('User created successfully');
       setShowCreateModal(false);
-      setFormData({ name: '', email: '', role: 'user' });
+      setFormData({ username: '', email: '', password: '', role: 'user' });
       loadUsers();
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
@@ -58,7 +63,7 @@ export default function AdminPanel() {
       await api.put(`/users/${editingUser.id}`, formData);
       setSuccess('User updated successfully');
       setEditingUser(null);
-      setFormData({ name: '', email: '', role: 'user' });
+      setFormData({ username: '', email: '', password: '', role: 'user' });
       loadUsers();
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
@@ -82,14 +87,14 @@ export default function AdminPanel() {
 
   const startEdit = (user: User) => {
     setEditingUser(user);
-    setFormData({ name: user.name, email: user.email, role: user.role });
+    setFormData({ username: user.username, email: user.email, password: '', role: user.role });
     setShowCreateModal(true);
   };
 
   const closeModal = () => {
     setShowCreateModal(false);
     setEditingUser(null);
-    setFormData({ name: '', email: '', role: 'user' });
+    setFormData({ username: '', email: '', password: '', role: 'user' });
     setError('');
   };
 
@@ -105,6 +110,18 @@ export default function AdminPanel() {
 
   return (
     <div className="max-w-6xl mx-auto">
+      {/* Authentication Notice */}
+      <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+        <h3 className="text-sm font-semibold text-yellow-800 dark:text-yellow-400 mb-2">🔒 Authentication Required</h3>
+        <p className="text-sm text-yellow-700 dark:text-yellow-500">
+          This admin panel requires authentication. Login as admin first:
+        </p>
+        <code className="block mt-2 p-2 bg-yellow-100 dark:bg-yellow-900/40 rounded text-xs text-yellow-900 dark:text-yellow-300">
+          POST /api/auth/login<br />
+          {`{ "email": "admin@playwright-hub.dev", "password": "admin123" }`}
+        </code>
+      </div>
+
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h2>
         <button
@@ -131,7 +148,7 @@ export default function AdminPanel() {
         <table className="w-full" data-testid="users-table">
           <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
             <tr>
-              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Name</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Username</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Email</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Role</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Created</th>
@@ -141,7 +158,7 @@ export default function AdminPanel() {
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {users.map((user) => (
               <tr key={user.id} className="hover:bg-gray-50 dark:hover:bg-gray-700" data-testid={`user-row-${user.id}`}>
-                <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{user.name}</td>
+                <td className="px-6 py-4 text-sm text-gray-900 dark:text-white">{user.username}</td>
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{user.email}</td>
                 <td className="px-6 py-4 text-sm">
                   <span
@@ -210,12 +227,12 @@ export default function AdminPanel() {
 
             <form onSubmit={editingUser ? handleUpdate : handleCreate} className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
                 <input
                   type="text"
                   required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                   className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   data-testid="user-name-input"
                 />
@@ -230,6 +247,21 @@ export default function AdminPanel() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   data-testid="user-email-input"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Password {editingUser && '(leave blank to keep current)'}
+                </label>
+                <input
+                  type="password"
+                  required={!editingUser}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  data-testid="user-password-input"
+                  minLength={6}
                 />
               </div>
 
