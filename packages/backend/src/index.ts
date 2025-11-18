@@ -8,12 +8,13 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { initializeDatabase } from './db/database.js';
 import { seedDatabase } from './db/seed.js';
+import type { FastifyRequest, FastifyReply } from 'fastify';
 
 // Conditionally import middleware based on environment
-let requestLoggerMiddleware: any = null;
-let latencySimulationMiddleware: any = null;
-let errorInjectionMiddleware: any = null;
-let rateLimitMiddleware: any = null;
+let requestLoggerMiddleware: ((request: FastifyRequest, reply: FastifyReply) => Promise<void>) | null = null;
+let latencySimulationMiddleware: ((request: FastifyRequest, reply: FastifyReply) => Promise<void>) | null = null;
+let errorInjectionMiddleware: ((request: FastifyRequest, reply: FastifyReply) => Promise<void>) | null = null;
+let rateLimitMiddleware: ((request: FastifyRequest, reply: FastifyReply) => Promise<void>) | null = null;
 
 // Always import rate limiting (can be disabled via config)
 import { rateLimitMiddleware as rateLimit } from './middleware/rateLimit.js';

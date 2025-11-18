@@ -88,7 +88,7 @@ export function getRequestLogs(options: {
   const { limit = 100, offset = 0, userId, method, path: pathFilter, minDuration } = options;
 
   let query = 'SELECT * FROM request_logs WHERE 1=1';
-  const params: any[] = [];
+  const params: unknown[] = [];
 
   if (userId) {
     query += ' AND user_id = ?';
@@ -131,7 +131,7 @@ export async function requestLoggerMiddleware(request: FastifyRequest, reply: Fa
   const originalSend = reply.send.bind(reply);
 
   // Override send to log before sending
-  reply.send = function (payload: any) {
+  reply.send = function (payload: unknown) {
     const duration = Date.now() - startTime;
     const userId = (request.user as { id?: number })?.id || null;
     const userAgent = request.headers['user-agent'] || null;

@@ -47,7 +47,7 @@ export const featureFlagModel = {
     data: { enabled?: boolean; rolloutPercentage?: number }
   ): FeatureFlag | undefined {
     const updates: string[] = [];
-    const params: any = { key };
+    const params: Record<string, number | string> = { key };
 
     if (data.enabled !== undefined) {
       updates.push('enabled = @enabled');

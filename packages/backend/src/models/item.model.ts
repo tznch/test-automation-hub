@@ -33,7 +33,7 @@ export const itemModel = {
       FROM items
     `;
     let countQuery = 'SELECT COUNT(*) as count FROM items';
-    const queryParams: any = {};
+    const queryParams: Record<string, number | string> = {};
 
     if (params?.category) {
       query += ' WHERE category = @category';
@@ -81,7 +81,7 @@ export const itemModel = {
     data: Partial<Pick<Item, 'name' | 'description' | 'price' | 'category' | 'stock' | 'imageUrl'>>
   ): Item | undefined {
     const updates: string[] = [];
-    const params: any = { id };
+    const params: Record<string, number | string> = { id };
 
     if (data.name !== undefined) {
       updates.push('name = @name');

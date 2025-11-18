@@ -67,7 +67,7 @@ export const userModel = {
     data: Partial<Pick<User, 'username' | 'email' | 'password' | 'role'>>
   ): User | undefined {
     const updates: string[] = [];
-    const params: any = { id };
+    const params: Record<string, number | string> = { id };
 
     if (data.username) {
       updates.push('username = @username');

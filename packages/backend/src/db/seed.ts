@@ -1,5 +1,4 @@
 import { db } from './database.js';
-import type { User, Item, Order, FeatureFlag } from '../types/models.js';
 import { hashPassword } from '../utils/auth.js';
 
 export async function seedDatabase() {
