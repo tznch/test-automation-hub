@@ -149,6 +149,18 @@ await fastify.register(
     const adminRoutes = await import('./routes/admin.routes.js');
     instance.register(adminRoutes.default);
 
+    // Admin challenge routes (session-only user management for testing)
+    const adminChallengeRoutes = await import('./routes/admin.challenge.routes.js');
+    instance.register(adminChallengeRoutes.default, { prefix: '/admin-challenge' });
+
+    // Schema validation test routes
+    const schemaRoutes = await import('./routes/schema.routes.js');
+    instance.register(schemaRoutes.default, { prefix: '/schema-test' });
+
+    // OAuth mock routes
+    const oauthRoutes = await import('./routes/oauth.routes.js');
+    instance.register(oauthRoutes.default, { prefix: '/oauth' });
+
     // Test database endpoints (temporary - kept for backward compatibility)
     instance.get('/users-list', async () => {
       const { userModel } = await import('./models/user.model.js');

@@ -20,16 +20,12 @@ export default function AdminPanel() {
 
   const loadUsers = async () => {
     try {
-      const response = await api.get<{ users: User[] }>('/users');
+      const response = await api.get<{ users: User[] }>('/admin-challenge/users');
       setUsers(response.users || []);
       setLoading(false);
       setError('');
     } catch (err: any) {
-      if (err.response?.status === 401) {
-        setError('Authentication required. This endpoint requires admin role. Use /api/auth/login with admin credentials first.');
-      } else {
-        setError('Failed to load users');
-      }
+      setError('Failed to load users');
       setLoading(false);
     }
   };
@@ -43,7 +39,7 @@ export default function AdminPanel() {
     setError('');
 
     try {
-      await api.post('/users', formData);
+      await api.post('/admin-challenge/users', formData);
       setSuccess('User created successfully');
       setShowCreateModal(false);
       setFormData({ username: '', email: '', password: '', role: 'user' });
@@ -60,7 +56,7 @@ export default function AdminPanel() {
     setError('');
 
     try {
-      await api.put(`/users/${editingUser.id}`, formData);
+      await api.patch(`/admin-challenge/users/${editingUser.id}`, formData);
       setSuccess('User updated successfully');
       setEditingUser(null);
       setFormData({ username: '', email: '', password: '', role: 'user' });
@@ -76,7 +72,7 @@ export default function AdminPanel() {
     setError('');
 
     try {
-      await api.delete(`/users/${id}`);
+      await api.delete(`/admin-challenge/users/${id}`);
       setSuccess('User deleted successfully');
       loadUsers();
       setTimeout(() => setSuccess(''), 3000);
@@ -110,18 +106,6 @@ export default function AdminPanel() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Authentication Notice */}
-      <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-        <h3 className="text-sm font-semibold text-yellow-800 dark:text-yellow-400 mb-2">🔒 Authentication Required</h3>
-        <p className="text-sm text-yellow-700 dark:text-yellow-500">
-          This admin panel requires authentication. Login as admin first:
-        </p>
-        <code className="block mt-2 p-2 bg-yellow-100 dark:bg-yellow-900/40 rounded text-xs text-yellow-900 dark:text-yellow-300">
-          POST /api/auth/login<br />
-          {`{ "email": "admin@playwright-hub.dev", "password": "admin123" }`}
-        </code>
-      </div>
-
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">User Management</h2>
         <button
@@ -137,10 +121,6 @@ export default function AdminPanel() {
         <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 rounded">
           {success}
         </div>
-      )}
-
-      {error && (
-        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded">{error}</div>
       )}
 
       {/* Users Table */}
@@ -226,6 +206,12 @@ export default function AdminPanel() {
             </div>
 
             <form onSubmit={editingUser ? handleUpdate : handleCreate} className="p-6 space-y-4">
+              {error && (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 rounded text-sm">
+                  {error}
+                </div>
+              )}
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Username</label>
                 <input
