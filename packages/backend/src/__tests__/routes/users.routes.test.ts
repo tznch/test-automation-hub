@@ -106,12 +106,13 @@ describe('Users Routes', () => {
 
   describe('POST /users', () => {
     it('should create a new user', async () => {
+      const timestamp = Date.now();
       const response = await app.inject({
         method: 'POST',
         url: '/users',
         payload: {
-          username: 'newuser_routes',
-          email: 'newuser_routes@example.com',
+          username: `newuser_routes_${timestamp}`,
+          email: `newuser_routes_${timestamp}@example.com`,
           password: 'password123',
         },
       });
@@ -119,8 +120,8 @@ describe('Users Routes', () => {
       expect(response.statusCode).toBe(201);
       const body = JSON.parse(response.body);
       expect(body).toHaveProperty('id');
-      expect(body.username).toBe('newuser_routes');
-      expect(body.email).toBe('newuser_routes@example.com');
+      expect(body.username).toBe(`newuser_routes_${timestamp}`);
+      expect(body.email).toBe(`newuser_routes_${timestamp}@example.com`);
     });
 
     it('should return 409 for duplicate email', async () => {
@@ -153,13 +154,14 @@ describe('Users Routes', () => {
 
   describe('PATCH /users/:id', () => {
     it('should update a user', async () => {
+      const timestamp = Date.now();
       // First create a user
       const createResponse = await app.inject({
         method: 'POST',
         url: '/users',
         payload: {
-          username: 'usertoupdate_routes',
-          email: 'usertoupdate_routes@example.com',
+          username: `usertoupdate_routes_${timestamp}`,
+          email: `usertoupdate_routes_${timestamp}@example.com`,
           password: 'password123',
         },
       });
@@ -174,15 +176,15 @@ describe('Users Routes', () => {
           authorization: `Bearer ${adminToken}`,
         },
         payload: {
-          username: 'updateduser_routes',
-          email: 'updateduser_routes@example.com',
+          username: `updateduser_routes_${timestamp}`,
+          email: `updateduser_routes_${timestamp}@example.com`,
         },
       });
 
       expect(response.statusCode).toBe(200);
       const body = JSON.parse(response.body);
-      expect(body.username).toBe('updateduser_routes');
-      expect(body.email).toBe('updateduser_routes@example.com');
+      expect(body.username).toBe(`updateduser_routes_${timestamp}`);
+      expect(body.email).toBe(`updateduser_routes_${timestamp}@example.com`);
     });
 
     it('should return 404 for non-existent user', async () => {

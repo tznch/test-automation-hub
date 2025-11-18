@@ -30,15 +30,16 @@ describe('Database Models', () => {
     });
 
     it('should create a new user', () => {
+      const timestamp = Date.now();
       const newUser = userModel.create({
-        username: 'testuser_model',
-        email: 'testuser_model@example.com',
+        username: `testuser_model_${timestamp}`,
+        email: `testuser_model_${timestamp}@example.com`,
         password: 'hashedpassword',
         role: 'user',
       });
       expect(newUser).toBeDefined();
       expect(newUser.id).toBeDefined();
-      expect(newUser.username).toBe('testuser_model');
+      expect(newUser.username).toBe(`testuser_model_${timestamp}`);
     });
   });
 
