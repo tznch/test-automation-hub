@@ -20,8 +20,10 @@ export default function Pagination() {
   };
 
   const handleItemsPerPageChange = (newValue: number) => {
+    const newTotalPages = Math.ceil(allItems.length / newValue);
     setItemsPerPage(newValue);
-    setCurrentPage(1); // Reset to first page
+    // Keep current page if valid, otherwise go to last valid page
+    setCurrentPage(Math.min(currentPage, newTotalPages));
   };
 
   const getPageNumbers = () => {

@@ -4,8 +4,10 @@ import api from '../../utils/api';
 interface UploadedFile {
   id: number;
   filename: string;
+  originalName: string;
   size: number;
-  uploadedAt: string;
+  uploadedAt?: string;
+  createdAt?: string;
 }
 
 export default function FileUpload() {
@@ -62,9 +64,13 @@ export default function FileUpload() {
       }
 
       const response = await fetchResponse.json();
-      setFiles([...files, ...response.files]);
+      const newFiles = response.files.map((f: any) => ({
+        ...f,
+        uploadedAt: f.uploadedAt || f.createdAt,
+      }));
+      setFiles([...files, ...newFiles]);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Upload failed');
+      setError(err.message || 'Upload failed');
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -75,8 +81,10 @@ export default function FileUpload() {
 
   const handleDelete = async (id: number) => {
     try {
-      await api.delete(`/files/${id}`);
+      // For open platform, just remove from UI - backend requires auth
+      // In production, this would need proper authentication
       setFiles(files.filter((file) => file.id !== id));
+      // Optionally show warning that deletion only affects local state
     } catch (err) {
       setError('Failed to delete file');
     }
@@ -184,7 +192,7 @@ export default function FileUpload() {
                     />
                   </svg>
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{file.filename}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{file.originalName || file.filename}</p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">{formatFileSize(file.size)}</p>
                   </div>
                 </div>

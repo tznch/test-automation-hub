@@ -100,9 +100,9 @@ export default function ProductList() {
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{product.name}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400">{product.category}</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-indigo-600">${product.price}</span>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">Stock: {product.stock}</span>
+                <div>
+                  <div className="text-2xl font-bold text-indigo-600 mb-2">${product.price}</div>
+                  <div className="text-sm text-gray-500 dark:text-gray-400">Stock: {product.stock}</div>
                 </div>
               </div>
             ))}

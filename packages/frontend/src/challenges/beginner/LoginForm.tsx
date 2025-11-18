@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess(false);
@@ -32,8 +35,39 @@ export default function LoginForm() {
       return;
     }
 
-    // Simulate successful login
-    setSuccess(true);
+    // Call login API
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || 'Login failed');
+        return;
+      }
+
+      // Store token and user data
+      localStorage.setItem('token', data.accessToken);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      
+      setSuccess(true);
+      
+      // Redirect after 1 second
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
+    } catch (err: any) {
+      setError(err.message || 'Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -86,17 +120,33 @@ export default function LoginForm() {
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-md font-medium transition"
+            disabled={loading}
+            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed text-white py-2 px-4 rounded-md font-medium transition"
             data-testid="login-button"
           >
-            Login
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-          <p>Demo credentials:</p>
-          <p className="font-mono text-xs mt-1">test@example.com / password123</p>
+          <p>Demo credentials (use existing users from database):</p>
+          <p className="font-mono text-xs mt-1">admin@example.com / admin123</p>
+          <p className="font-mono text-xs">user@example.com / user123</p>
         </div>
+      </div>
+
+      {/* Testing Hints */}
+      <div className="mt-6 p-4 bg-indigo-900/20 border border-indigo-600 rounded-lg">
+        <h3 className="text-sm font-semibold text-indigo-400 mb-2">🧪 Testing Hints</h3>
+        <ul className="text-sm text-gray-300 space-y-1">
+          <li>• Test empty field validation (should show error messages)</li>
+          <li>• Test invalid email format (should show "valid email" error)</li>
+          <li>• Test short password (less than 6 chars)</li>
+          <li>• Test invalid credentials (should return 401)</li>
+          <li>• Test successful login (should redirect to home)</li>
+          <li>• Verify token is stored in localStorage</li>
+          <li>• Use <code className="bg-gray-800 px-1 rounded">page.waitForURL('/')</code> for redirect</li>
+        </ul>
       </div>
     </div>
   );

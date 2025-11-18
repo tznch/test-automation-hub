@@ -28,17 +28,28 @@ export default function RealtimeChat() {
     ws.onopen = () => {
       setConnected(true);
       console.log('WebSocket connected');
+      // Send authentication message
+      ws.send(JSON.stringify({
+        type: 'auth',
+        username: mockUser.name,
+        userId: Math.floor(Math.random() * 10000),
+      }));
     };
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
 
       if (data.type === 'message') {
-        setMessages((prev) => [...prev, data]);
+        setMessages((prev) => [...prev, data.data || data]);
       } else if (data.type === 'users') {
         setUsersOnline(data.count);
       } else if (data.type === 'history') {
         setMessages(data.messages || []);
+      } else if (data.type === 'connected') {
+        setMessages(data.messages || []);
+        setUsersOnline(data.userCount || 1);
+      } else if (data.type === 'auth_success') {
+        console.log('Authenticated as', data.user);
       }
     };
 
