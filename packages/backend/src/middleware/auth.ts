@@ -16,7 +16,7 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
   try {
     await request.jwtVerify();
     // User is now properly typed
-  } catch (_err) {
+  } catch {
     reply.code(401).send({ error: 'Unauthorized', message: 'Invalid or missing token' });
   }
 }
@@ -33,7 +33,7 @@ export function requireRole(...roles: string[]) {
           message: `Required role: ${roles.join(' or ')}`,
         });
       }
-    } catch (_err) {
+    } catch {
       reply.code(401).send({ error: 'Unauthorized', message: 'Invalid or missing token' });
     }
   };

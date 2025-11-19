@@ -53,11 +53,12 @@ export default function FormValidation() {
           return 'Password must contain uppercase, lowercase, and number';
         return '';
 
-      case 'age':
+      case 'age': {
         if (!value) return 'Age is required';
         const age = Number(value);
         if (isNaN(age) || age < 18 || age > 120) return 'Age must be between 18 and 120';
         return '';
+      }
 
       case 'website':
         if (value && !/^https?:\/\/.+\..+/.test(value)) return 'Invalid URL format';

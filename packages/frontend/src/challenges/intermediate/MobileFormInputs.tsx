@@ -41,7 +41,7 @@ export default function MobileFormInputs() {
     switch (name) {
       case 'phone':
         // Basic phone validation (digits, spaces, dashes, plus, parens)
-        isError = !/^[\d\s\-\+\(\)]+$/.test(value) && value !== '';
+        isError = !/^[\d\s\-+()]+$/.test(value) && value !== '';
         break;
       case 'email':
         isError = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value !== '';
@@ -49,10 +49,11 @@ export default function MobileFormInputs() {
       case 'website':
         isError = !/^https?:\/\/.+/.test(value) && value !== '';
         break;
-      case 'age':
+      case 'age': {
         const ageNum = parseInt(value);
         isError = (isNaN(ageNum) || ageNum < 18 || ageNum > 120) && value !== '';
         break;
+      }
     }
 
     setErrors(prev => ({ ...prev, [name]: isError }));

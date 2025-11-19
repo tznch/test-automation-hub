@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { chatService } from '../services/chat.service.js';
 
 export default async function chatRoutes(fastify: FastifyInstance) {
-  fastify.get('/chat', { websocket: true }, (socket, request) => {
+  fastify.get('/chat', { websocket: true }, (socket, _request) => {
     let currentRoom = 'general';
     let currentUser: { id: number; username: string } | null = null;
 
@@ -57,7 +57,7 @@ export default async function chatRoutes(fastify: FastifyInstance) {
             );
             break;
 
-          case 'message':
+          case 'message': {
             if (!currentUser) {
               socket.socket.send(
                 JSON.stringify({
@@ -91,6 +91,7 @@ export default async function chatRoutes(fastify: FastifyInstance) {
               }
             });
             break;
+          }
 
           case 'typing':
             // Broadcast typing indicator
@@ -114,7 +115,7 @@ export default async function chatRoutes(fastify: FastifyInstance) {
               })
             );
         }
-      } catch (error) {
+      } catch {
         socket.socket.send(
           JSON.stringify({
             type: 'error',
