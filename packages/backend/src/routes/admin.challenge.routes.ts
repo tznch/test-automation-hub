@@ -18,7 +18,7 @@ export default async function adminChallengeRoutes(fastify: FastifyInstance) {
   // Get all challenge users
   fastify.get('/users', {
     handler: async (_request, reply) => {
-      const sanitized = challengeUsers.map(({ password, ...user }) => user);
+      const sanitized = challengeUsers.map(({ password: _password, ...user }) => user);
       return reply.send({ users: sanitized });
     },
   });
@@ -47,7 +47,7 @@ export default async function adminChallengeRoutes(fastify: FastifyInstance) {
         });
       }
 
-      const { password, ...sanitized } = user;
+      const { password: _password, ...sanitized } = user;
       return reply.send(sanitized);
     },
   });
@@ -165,7 +165,7 @@ export default async function adminChallengeRoutes(fastify: FastifyInstance) {
       }
       if (updates.role) user.role = updates.role;
 
-      const { password, ...sanitized } = user;
+      const { password: _password, ...sanitized } = user;
       return reply.send(sanitized);
     },
   });

@@ -190,7 +190,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
   fastify.get('/me', {
     preHandler: authenticate,
     handler: async (request, reply) => {
-      const userData = request.user as any;
+      const userData = request.user;
       const user = userModel.findById(userData.id);
 
       if (!user) {
@@ -200,7 +200,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      const { password, ...userWithoutPassword } = user;
+      const { password: _password, ...userWithoutPassword } = user;
       return reply.send(userWithoutPassword);
     },
   });

@@ -1,14 +1,16 @@
 import type { FastifyInstance } from 'fastify';
 import { userModel } from '../models/user.model.js';
 import { hashPassword } from '../utils/auth.js';
+import { authenticate, requireRole } from '../middleware/auth.js';
 
 export default async function userRoutes(fastify: FastifyInstance) {
-  // Get all users (public for testing purposes)
+  // Get all users (admin only)
   fastify.get('/', {
+    preHandler: [authenticate, requireRole('admin', 'moderator')],
     handler: async (request, reply) => {
       const users = userModel.findAll();
-      const sanitized = users.map(({ password, ...user }) => user);
-      return reply.send({ users: sanitized });
+      const sanitized = users.map(({ password: _password, ...user }) => user);
+      return reply.send(sanitized);
     },
   });
 

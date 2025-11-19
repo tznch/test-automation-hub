@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-import api from '../../utils/api';
 
 interface UploadedFile {
   id: number;

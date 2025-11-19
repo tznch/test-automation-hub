@@ -24,21 +24,21 @@ export default async function adminRoutes(fastify: FastifyInstance) {
 
   // Configure error injection
   fastify.post('/admin/config/error-injection', async (request, _reply) => {
-    const config = request.body as any;
+    const config = request.body as Record<string, unknown>;
     configureErrorInjection(config);
     return { success: true, config: getErrorInjectionConfig() };
   });
 
   // Configure latency simulation
   fastify.post('/admin/config/latency', async (request, _reply) => {
-    const config = request.body as any;
+    const config = request.body as Record<string, unknown>;
     configureLatencySimulation(config);
     return { success: true, config: getLatencyConfig() };
   });
 
   // Configure rate limiting
   fastify.post('/admin/config/rate-limit', async (request, _reply) => {
-    const config = request.body as any;
+    const config = request.body as Record<string, unknown>;
     configureRateLimit(config);
     return { success: true, config: getRateLimitConfig() };
   });
