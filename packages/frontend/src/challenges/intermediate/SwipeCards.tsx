@@ -1,10 +1,4 @@
-export default function SwipeCards() {
-  return (
-    <div className="min-h-screen bg-gray-900 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-6">Swipe Cards</h1>
-        <p className="text-gray-300 mb-4">Placeholder: Swipeable card interface (Tinder-style)</p>
-        import { useState } from 'react';
+import { useState } from 'react';
 
 interface Card {
   id: number;
@@ -137,10 +131,6 @@ export default function SwipeCards() {
           <li>• Verify liked/rejected counts update correctly</li>
           <li>• Test reset functionality after all cards are swiped</li>
         </ul>
-      </div>
-    </div>
-  );
-}
       </div>
     </div>
   );

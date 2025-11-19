@@ -14,7 +14,6 @@ export default function ApiRateLimiting() {
   const [resetTime, setResetTime] = useState<number | null>(null);
   const [autoRequestActive, setAutoRequestActive] = useState(false);
   
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const autoRequestRef = useRef<NodeJS.Timeout | null>(null);
 
   // Reset rate limit every 10 seconds

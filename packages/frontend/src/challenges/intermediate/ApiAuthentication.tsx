@@ -6,10 +6,14 @@ interface User {
   role: string;
 }
 
-interface AuthResponse {
-  token: string;
-  user: User;
-}
+// interface AuthResponse {
+//   token: string;
+//   user: {
+//     id: number;
+//     username: string;
+//     email: string;
+//   };
+// }
 
 export default function ApiAuthentication() {
   const [username, setUsername] = useState('admin');

@@ -1,9 +1,4 @@
-export default function OrientationChanges() {
-  return (
-    <div className="min-h-screen bg-gray-900 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-6">Orientation Changes</h1>
-        import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 type Orientation = 'portrait-primary' | 'landscape-primary';
 
@@ -123,14 +118,6 @@ export default function OrientationChanges() {
               orientation === 'landscape-primary' ? 'hidden' : ''
             }`}></div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-        <div className="bg-gray-800 rounded-lg p-6">
-          <p className="text-gray-400">Orientation testing implementation coming soon...</p>
-          <p className="text-sm text-gray-500 mt-2">Will feature portrait/landscape testing</p>
         </div>
       </div>
     </div>

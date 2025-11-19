@@ -1,9 +1,4 @@
-export default function PerformanceMonitoring() {
-  return (
-    <div className="min-h-screen bg-gray-900 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-6">Performance Monitoring</h1>
-        import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 interface Metric {
   name: string;
@@ -21,7 +16,6 @@ export default function PerformanceMonitoring() {
   
   const [isSimulating, setIsSimulating] = useState(false);
   const [layoutShiftCount, setLayoutShiftCount] = useState(0);
-  const heavyTaskRef = useRef<number>(0);
 
   // Simulate heavy computation (blocking main thread)
   const blockMainThread = (duration: number) => {
@@ -205,13 +199,6 @@ export default function PerformanceMonitoring() {
           <li>• Test Blocking: Click FID trigger and try to interact with other elements immediately</li>
           <li>• Verify ratings: Check if class names change from 'text-green-600' to 'text-red-600'</li>
         </ul>
-      </div>
-    </div>
-  );
-}
-        <div className="bg-gray-800 rounded-lg p-6">
-          <p className="text-gray-400">Web Vitals dashboard implementation coming soon...</p>
-        </div>
       </div>
     </div>
   );

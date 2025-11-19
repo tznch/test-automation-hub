@@ -1,6 +1,4 @@
-export default function LazyLoading() {
-  return (
-    import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface ImageItem {
   id: number;
@@ -57,7 +55,7 @@ export default function LazyLoading() {
     };
   }, []);
 
-  const imageRef = (el: HTMLImageElement | null, id: number) => {
+  const imageRef = (el: HTMLImageElement | null) => {
     if (el && observerRef.current) {
       observerRef.current.observe(el);
     }
@@ -129,7 +127,7 @@ export default function LazyLoading() {
                 </div>
               ) : (
                 <img
-                  ref={(el) => imageRef(el, image.id)}
+                  ref={(el) => imageRef(el)}
                   data-id={image.id}
                   src={image.loaded ? image.src : image.placeholder}
                   alt={image.title}
@@ -165,7 +163,5 @@ export default function LazyLoading() {
         </ul>
       </div>
     </div>
-  );
-}
   );
 }
