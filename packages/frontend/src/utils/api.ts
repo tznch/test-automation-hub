@@ -36,6 +36,28 @@ class ApiClient {
 
     if (endpoint.startsWith('/items')) {
       const url = new URL(`http://localhost${endpoint}`);
+      const method = _options.method || 'GET';
+
+      if (method === 'POST') {
+        const body = JSON.parse(_options.body as string || '{}');
+
+        // Simulate validation error
+        if (!body.name || !body.price || !body.category) {
+          throw new Error('Validation error: Missing required fields');
+        }
+
+        return {
+          id: Math.floor(Math.random() * 1000) + 100,
+          name: body.name,
+          price: body.price,
+          category: body.category,
+          stock: 0,
+          imageUrl: null,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+      }
+
       const page = Number(url.searchParams.get('page')) || 1;
       const limit = Number(url.searchParams.get('limit')) || 10;
       const category = url.searchParams.get('category');
