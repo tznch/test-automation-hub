@@ -38,7 +38,7 @@ export default function LoginForm() {
     // Call login API
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3000/api/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,9 +56,9 @@ export default function LoginForm() {
       // Store token and user data
       localStorage.setItem('token', data.accessToken);
       localStorage.setItem('user', JSON.stringify(data.user));
-      
+
       setSuccess(true);
-      
+
       // Redirect after 1 second
       setTimeout(() => {
         navigate('/');

@@ -17,7 +17,7 @@ export default function ApiGetRequests() {
   const fetchItems = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3000/api/items?limit=${limit}&offset=${offset}`);
+      const response = await fetch(`/api/items?limit=${limit}&offset=${offset}`);
       setStatusCode(response.status);
 
       if (response.ok) {

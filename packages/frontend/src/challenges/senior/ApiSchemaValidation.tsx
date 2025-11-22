@@ -158,7 +158,7 @@ export default function ApiSchemaValidation() {
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/schema-test/endpoints')
+    fetch('/api/schema-test/endpoints')
       .then((res) => res.json())
       .then((data) => setEndpoints(data.endpoints))
       .catch((err) => console.error('Failed to fetch endpoints:', err));
@@ -173,7 +173,7 @@ export default function ApiSchemaValidation() {
       const endpoint = endpoints.find((e) => e.id === selectedEndpoint);
       if (!endpoint) return;
 
-      const url = `http://localhost:3000${endpoint.path}?variant=${selectedVariant}`;
+      const url = `/api${endpoint.path}?variant=${selectedVariant}`;
       const res = await fetch(url);
       const data = await res.json();
       setResponse(data);

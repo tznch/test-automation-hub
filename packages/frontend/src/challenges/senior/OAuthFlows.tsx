@@ -25,7 +25,7 @@ export default function OAuthFlows() {
 
   useEffect(() => {
     // Fetch available OAuth providers
-    fetch('http://localhost:3000/api/oauth/providers')
+    fetch('/api/oauth/providers')
       .then((res) => res.json())
       .then((data) => setProviders(data.providers))
       .catch((err) => console.error('Failed to fetch providers:', err));
@@ -63,7 +63,7 @@ export default function OAuthFlows() {
 
     const redirectUri = window.location.origin + window.location.pathname;
     const state = Math.random().toString(36).substring(7);
-    const authUrl = `http://localhost:3000/api/oauth/${providerId}/authorize?redirect_uri=${encodeURIComponent(
+    const authUrl = `/api/oauth/${providerId}/authorize?redirect_uri=${encodeURIComponent(
       redirectUri
     )}&state=${state}&response_type=code`;
 
@@ -102,7 +102,7 @@ export default function OAuthFlows() {
     try {
       // Exchange authorization code for access token
       const tokenResponse = await fetch(
-        `http://localhost:3000/api/oauth/${providerId}/token`,
+        `/api/oauth/${providerId}/token`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -137,7 +137,7 @@ export default function OAuthFlows() {
   const fetchUserProfile = async (token: string, providerId: string) => {
     try {
       const profileResponse = await fetch(
-        `http://localhost:3000/api/oauth/${providerId}/profile`,
+        `/api/oauth/${providerId}/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -159,7 +159,7 @@ export default function OAuthFlows() {
   const handleLogout = async () => {
     if (accessToken) {
       try {
-        await fetch('http://localhost:3000/api/oauth/revoke', {
+        await fetch('/api/oauth/revoke', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token: accessToken }),

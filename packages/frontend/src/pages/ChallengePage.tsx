@@ -132,7 +132,7 @@ export default function ChallengePage() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-4 gap-6">
         {/* Sidebar */}
         <div className="lg:col-span-1 space-y-4">
           {/* Objectives */}
@@ -190,7 +190,7 @@ export default function ChallengePage() {
         </div>
 
         {/* Main Content */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 min-h-[600px] border border-gray-200 dark:border-gray-700">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Challenge Application</h2>
             <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6">

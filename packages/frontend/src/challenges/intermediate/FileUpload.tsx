@@ -53,7 +53,7 @@ export default function FileUpload() {
 
     try {
       // Use fetch directly for multipart/form-data (no auth required in open platform)
-      const fetchResponse = await fetch('http://localhost:3000/api/files/upload', {
+      const fetchResponse = await fetch('/api/files/upload', {
         method: 'POST',
         body: formData,
       });
@@ -62,6 +62,10 @@ export default function FileUpload() {
         throw new Error('Upload failed');
       }
 
+      // The original instruction had a syntax error and introduced undeclared variables.
+      // Assuming the intent was to process the response from the new endpoint
+      // and map it similarly to how the old endpoint's response was handled.
+      // This is a best-effort interpretation to maintain syntactic correctness.
       const response = await fetchResponse.json();
       const newFiles = response.files.map((f: any) => ({
         ...f,
@@ -109,11 +113,10 @@ export default function FileUpload() {
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        className={`border-2 border-dashed rounded-lg p-12 text-center transition ${
-          dragActive
-            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
-            : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500'
-        }`}
+        className={`border-2 border-dashed rounded-lg p-12 text-center transition ${dragActive
+          ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
+          : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500'
+          }`}
         data-testid="drop-zone"
       >
         <svg
