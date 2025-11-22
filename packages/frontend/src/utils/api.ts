@@ -30,7 +30,7 @@ class ApiClient {
     }
   }
 
-  private getMockData(endpoint: string, options: RequestInit = {}): any {
+  private getMockData(endpoint: string, _options: RequestInit = {}): any {
     // Simulate network delay
     // await new Promise(resolve => setTimeout(resolve, 500));
 
