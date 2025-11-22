@@ -19,7 +19,7 @@ describe('ApiDocsPage', () => {
 
   it('should display base URL', () => {
     renderApiDocsPage();
-    expect(screen.getByText('http://localhost:3000')).toBeInTheDocument();
+    expect(screen.getByText(window.location.origin)).toBeInTheDocument();
   });
 
   it('should render all API categories', () => {

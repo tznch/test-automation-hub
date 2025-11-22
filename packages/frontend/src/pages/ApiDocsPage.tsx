@@ -338,7 +338,7 @@ export default function ApiDocsPage() {
       {/* Base URL */}
       <div className="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-4 mb-6">
         <h2 className="text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Base URL</h2>
-        <code className="text-indigo-600 dark:text-indigo-400 text-lg">http://localhost:3000</code>
+        <code className="text-indigo-600 dark:text-indigo-400 text-lg">{window.location.origin}</code>
       </div>
 
       {/* Endpoints by Category */}
@@ -370,9 +370,8 @@ export default function ApiDocsPage() {
                         {endpoint.path}
                       </code>
                       <svg
-                        className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${
-                          isExpanded ? 'rotate-180' : ''
-                        }`}
+                        className={`w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -458,13 +457,12 @@ export default function ApiDocsPage() {
                               >
                                 <div className="px-4 py-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3">
                                   <span
-                                    className={`font-semibold ${
-                                      code.startsWith('2')
+                                    className={`font-semibold ${code.startsWith('2')
                                         ? 'text-green-600 dark:text-green-400'
                                         : code.startsWith('4')
                                           ? 'text-yellow-600 dark:text-yellow-400'
                                           : 'text-red-600 dark:text-red-400'
-                                    }`}
+                                      }`}
                                   >
                                     {code}
                                   </span>
