@@ -26,26 +26,7 @@ const loadChallengeComponent = async (componentPath: string) => {
     };
   }
 
-  try {
-    return await loader() as { default: React.ComponentType };
-  } catch (error) {
-    console.error(`Failed to load challenge component: ${fullPath}`, error);
-    return {
-      default: () => (
-        <div className="text-center py-12">
-          <div className="text-red-500 mb-2">⚠️ Failed to load challenge</div>
-          <p className="text-gray-600">There was an error loading the challenge component.</p>
-          <p className="text-sm text-gray-500 mt-2">Path: {path}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
-          >
-            Retry
-          </button>
-        </div>
-      ),
-    };
-  }
+  return loader() as Promise<{ default: React.ComponentType }>;
 };
 
 export default function ChallengePage() {
