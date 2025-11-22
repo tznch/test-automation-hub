@@ -4,12 +4,18 @@ import { getChallengeById } from '../challenges/registry';
 import { getChallengeProgress, markChallengeCompleted } from '../challenges/progress';
 import type { Challenge } from '../challenges/types';
 
-// Dynamically import challenge components
-const loadChallengeComponent = (componentPath: string) => {
+// Dynamically import challenge components using import.meta.glob
+const challengeModules = import.meta.glob('../challenges/**/*.tsx');
+
+const loadChallengeComponent = async (componentPath: string) => {
   const path = componentPath.replace('./', '');
-  // Use dynamic import with a function that returns a promise
-  return import(/* @vite-ignore */ `../challenges/${path}`).catch((error) => {
-    console.error(`Failed to load challenge component: ${path}`, error);
+  // Construct the full path to match the glob keys
+  const fullPath = `../challenges/${path}.tsx`;
+
+  const loader = challengeModules[fullPath];
+
+  if (!loader) {
+    console.error(`Challenge component not found: ${fullPath}`);
     return {
       default: () => (
         <div className="text-center py-12">
@@ -18,7 +24,9 @@ const loadChallengeComponent = (componentPath: string) => {
         </div>
       ),
     };
-  });
+  }
+
+  return loader() as Promise<{ default: React.ComponentType }>;
 };
 
 export default function ChallengePage() {
@@ -26,7 +34,7 @@ export default function ChallengePage() {
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [showHints, setShowHints] = useState(false);
   const [progress, setProgress] = useState(getChallengeProgress(id || ''));
-  const [ChallengeComponent, setChallengeComponent] = useState<(() => JSX.Element) | null>(null);
+  const [ChallengeComponent, setChallengeComponent] = useState<React.ComponentType | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -94,9 +102,8 @@ export default function ChallengePage() {
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{challenge.title}</h1>
               <span
-                className={`px-3 py-1 text-sm font-medium rounded border ${
-                  levelColors[challenge.level]
-                }`}
+                className={`px-3 py-1 text-sm font-medium rounded border ${levelColors[challenge.level]
+                  }`}
               >
                 {challenge.level}
               </span>
