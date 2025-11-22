@@ -1,228 +1,193 @@
-import { db } from './database.js';
-import { hashPassword } from '../utils/auth.js';
-
-export async function seedDatabase() {
-  // Check if already seeded
-  // Check users
-  const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get() as { count: number };
-  if (userCount.count > 0) {
-    console.info('Users already seeded, skipping...');
-  } else {
-
-    // Seed users
-    const users = [
-      {
+export const mockUsers = [
+    {
+        id: 1,
         username: 'admin',
         email: 'admin@playwright-hub.dev',
-        password: await hashPassword('admin123'),
         role: 'admin',
-      },
-      {
+    },
+    {
+        id: 2,
         username: 'john_doe',
         email: 'john@example.com',
-        password: await hashPassword('password123'),
         role: 'user',
-      },
-      {
+    },
+    {
+        id: 3,
         username: 'jane_smith',
         email: 'jane@example.com',
-        password: await hashPassword('password123'),
         role: 'moderator',
-      },
-    ];
+    },
+];
 
-    const insertUser = db.prepare(`
-    INSERT OR REPLACE INTO users (username, email, password, role)
-    VALUES (@username, @email, @password, @role)
-  `);
-
-    users.forEach((user) => insertUser.run(user));
-    console.info('✓ Seeded users');
-  }
-
-  // Check items
-  const itemCount = db.prepare('SELECT COUNT(*) as count FROM items').get() as { count: number };
-  if (itemCount.count > 0) {
-    console.info('Items already seeded, skipping...');
-  } else {
-    // Seed items
-    const items = [
-      {
+export const mockItems = [
+    {
+        id: 1,
         name: 'Laptop Pro 15',
         description: 'High-performance laptop for professionals',
         price: 1299.99,
         category: 'Electronics',
         stock: 25,
         image_url: '/images/laptop.jpg',
-      },
-      {
+    },
+    {
+        id: 2,
         name: 'Wireless Mouse',
         description: 'Ergonomic wireless mouse with precision tracking',
         price: 29.99,
         category: 'Electronics',
         stock: 100,
         image_url: '/images/mouse.jpg',
-      },
-      {
+    },
+    {
+        id: 3,
         name: 'Mechanical Keyboard',
         description: 'RGB mechanical keyboard with Cherry MX switches',
         price: 149.99,
         category: 'Electronics',
         stock: 50,
         image_url: '/images/keyboard.jpg',
-      },
-      {
+    },
+    {
+        id: 4,
         name: 'USB-C Hub',
         description: '7-in-1 USB-C hub with HDMI and card reader',
         price: 49.99,
         category: 'Accessories',
         stock: 75,
         image_url: '/images/usb-hub.jpg',
-      },
-      {
+    },
+    {
+        id: 5,
         name: 'Webcam HD',
         description: '1080p webcam with auto-focus',
         price: 79.99,
         category: 'Electronics',
         stock: 40,
         image_url: '/images/webcam.jpg',
-      },
-      {
+    },
+    {
+        id: 6,
         name: 'Desk Lamp',
         description: 'LED desk lamp with adjustable brightness',
         price: 39.99,
         category: 'Office',
         stock: 60,
         image_url: '/images/lamp.jpg',
-      },
-      {
+    },
+    {
+        id: 7,
         name: 'Monitor 27"',
         description: '4K IPS monitor with HDR support',
         price: 449.99,
         category: 'Electronics',
         stock: 20,
         image_url: '/images/monitor.jpg',
-      },
-      {
+    },
+    {
+        id: 8,
         name: 'Headphones',
         description: 'Noise-cancelling wireless headphones',
         price: 199.99,
         category: 'Audio',
         stock: 35,
         image_url: '/images/headphones.jpg',
-      },
-      {
+    },
+    {
+        id: 9,
         name: 'Phone Stand',
         description: 'Adjustable phone stand for desk',
         price: 19.99,
         category: 'Accessories',
         stock: 120,
         image_url: '/images/phone-stand.jpg',
-      },
-      {
+    },
+    {
+        id: 10,
         name: 'Cable Organizer',
         description: 'Cable management clips set of 10',
         price: 12.99,
         category: 'Accessories',
         stock: 200,
         image_url: '/images/cable-organizer.jpg',
-      },
-      {
+    },
+    {
+        id: 11,
         name: 'Smart Watch',
         description: 'Fitness tracker and smartwatch with heart rate monitor',
         price: 199.99,
         category: 'Electronics',
         stock: 45,
         image_url: '/images/smartwatch.jpg',
-      },
-      {
+    },
+    {
+        id: 12,
         name: 'Bluetooth Speaker',
         description: 'Portable waterproof bluetooth speaker',
         price: 59.99,
         category: 'Audio',
         stock: 80,
         image_url: '/images/speaker.jpg',
-      },
-      {
+    },
+    {
+        id: 13,
         name: 'Tablet 10"',
         description: '10-inch tablet with stylus support',
         price: 329.99,
         category: 'Electronics',
         stock: 30,
         image_url: '/images/tablet.jpg',
-      },
-      {
+    },
+    {
+        id: 14,
         name: 'Portable Charger',
         description: '20000mAh power bank with fast charging',
         price: 34.99,
         category: 'Accessories',
         stock: 150,
         image_url: '/images/powerbank.jpg',
-      },
-      {
+    },
+    {
+        id: 15,
         name: 'Gaming Mouse Pad',
         description: 'Large RGB gaming mouse pad',
         price: 24.99,
         category: 'Accessories',
         stock: 100,
         image_url: '/images/mousepad.jpg',
-      },
-    ];
+    },
+];
 
-    const insertItem = db.prepare(`
-    INSERT OR REPLACE INTO items (name, description, price, category, stock, image_url)
-    VALUES (@name, @description, @price, @category, @stock, @image_url)
-  `);
-
-    items.forEach((item) => insertItem.run(item));
-    console.info('✓ Seeded items');
-  }
-
-  // Check feature flags
-  const flagCount = db.prepare('SELECT COUNT(*) as count FROM feature_flags').get() as { count: number };
-  if (flagCount.count > 0) {
-    console.info('Feature flags already seeded, skipping...');
-  } else {
-    // Seed feature flags
-    const flags = [
-      {
+export const mockFeatureFlags = [
+    {
+        id: 1,
         name: 'Dark Mode',
         key: 'dark_mode',
-        enabled: 1,
+        enabled: true,
         description: 'Enable dark mode UI',
         rollout_percentage: 100,
-      },
-      {
+    },
+    {
+        id: 2,
         name: 'New Checkout Flow',
         key: 'new_checkout',
-        enabled: 0,
+        enabled: false,
         description: 'A/B test for new checkout experience',
         rollout_percentage: 50,
-      },
-      {
+    },
+    {
+        id: 3,
         name: 'Advanced Search',
         key: 'advanced_search',
-        enabled: 1,
+        enabled: true,
         description: 'Enable advanced search filters',
         rollout_percentage: 100,
-      },
-      {
+    },
+    {
+        id: 4,
         name: 'Recommendations',
         key: 'recommendations',
-        enabled: 0,
+        enabled: false,
         description: 'Product recommendation engine',
         rollout_percentage: 25,
-      },
-    ];
-
-    const insertFlag = db.prepare(`
-    INSERT OR REPLACE INTO feature_flags (name, key, enabled, description, rollout_percentage)
-    VALUES (@name, @key, @enabled, @description, @rollout_percentage)
-  `);
-
-    flags.forEach((flag) => insertFlag.run(flag));
-    console.info('✓ Seeded feature flags');
-  }
-
-  console.info('✓ Database seeding complete');
-}
+    },
+];
